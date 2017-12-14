@@ -13,9 +13,14 @@ Symulator ruchu ulicznego
 ### Getting project
 1. `git clone https://github.com/Jahoo444/projekt-programistyczny.git`
 ### Building
-1. Go to project root folder (`cd projekt-programistyczny/`)
-2. Run command `cmake .`
-3. Run command `make`
+1. Go to project root folder
+  * `cd projekt-programistyczny/`
+2. Run command
+  * `cmake .`
+3. Run command
+  * `make`
 ### Running program
-1. Go to folder simulation `cd projekt-programistyczny/simulation`
-2. run `./simulation`
+1. Go to folder simulation
+  * `cd projekt-programistyczny/simulation`
+2. run
+  * `./simulation`
