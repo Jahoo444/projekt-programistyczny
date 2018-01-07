@@ -9,7 +9,7 @@ Symulator ruchu ulicznego
   * `sudo apt-get install cmake`
 3. SDL2 lib and includes
   * `sudo apt-get install libsdl2-2.0`
-  * `sudo sudo apt-get install libsdl2-dev`
+  * `sudo apt-get install libsdl2-dev`
 ### Getting project
 1. `git clone https://github.com/Jahoo444/projekt-programistyczny.git`
 ### Building
@@ -20,7 +20,5 @@ Symulator ruchu ulicznego
 3. Run command
   * `make`
 ### Running program
-1. Go to folder simulation
-  * `cd projekt-programistyczny/simulation`
-2. run
+1. run
   * `./simulation`

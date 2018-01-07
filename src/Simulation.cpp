@@ -17,17 +17,17 @@ void Simulation::init()
 void Simulation::run()
 {
 	bool running = true;
-	
+
 	while( running )
 	{
 		Uint32 timeStarted = SDL_GetTicks();	// czas rozpoczecia klatki
-		
+
 		running = handleEvents();
 		update();
 		render();
-		
+
 		Uint32 timeElapsed = SDL_GetTicks() - timeStarted;
-		
+
 		// odczekac do nastepnej klatki, by bylo w miare plynne 60 fpsow
 		if( timeElapsed < MILLIS_PER_FRAME )
 		{
@@ -40,7 +40,7 @@ bool Simulation::handleEvents()
 {
 	SDL_Event event;
 	bool running = true;
-	
+
 	while( running && SDL_PollEvent( &event ) )
 	{
 		if( event.type == SDL_QUIT )
@@ -48,7 +48,7 @@ bool Simulation::handleEvents()
 		else
 			running = this->state->handleEvent( &event );
 	}
-	
+
 	return running;
 }
 
