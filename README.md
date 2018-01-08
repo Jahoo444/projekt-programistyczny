@@ -5,8 +5,15 @@ Symulator ruchu ulicznego
 ### Requirements
 1. gcc verison 5.4 or newer
   * `sudo apt-get install gcc`
-2. cmake verison 3.0 or newer
+2. cmake verison 3.7 or newer
   * `sudo apt-get install cmake`
+  * If you have lower version, you can download from [here](https://cmake.org/download/) (Remeber to donwload binary version!) and then:
+   * Remove old version: `apt-get purge cmake`
+   * Copy binary files:
+    * `cp -r bin /usr/`
+    * `cp -r doc /usr/share/`
+    * `cp -r man /usr/share/`
+    * `cp -r share /usr/`
 3. SDL2 lib and includes
   * `sudo apt-get install libsdl2-2.0`
   * `sudo apt-get install libsdl2-dev`
