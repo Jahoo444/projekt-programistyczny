@@ -79,7 +79,7 @@ void SimulationState::update()
 	for( int i = 0; i < this->cars.size(); i++ )
 	{
 		Car *car = this->cars[ i ];
-		car->update();
+		car->update(cars);
 
 		if( car->shouldRemove() )
 		{
