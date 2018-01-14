@@ -1,6 +1,9 @@
 #include "Simulation.h"
 
+#include "traffic_state.h"
 #include <time.h>
+
+constexpr bool SHOW_TRAFFIC_INFO { false };
 
 Simulation::Simulation()
 {
@@ -25,6 +28,9 @@ void Simulation::run()
 		running = handleEvents();
 		update();
 		render();
+
+		if(SHOW_TRAFFIC_INFO)
+			std::cout<<static_cast<SimulationState*>(this->state)->getTrafficState()<<std::endl;
 
 		Uint32 timeElapsed = SDL_GetTicks() - timeStarted;
 

@@ -4,8 +4,9 @@
 
 #include <stdlib.h>
 #include <iostream>
+#include <chrono>
 
-Car::Car( TileMap *map, int row, int column )
+Car::Car( TileMap *map, int row, int column ) : creation_time{std::chrono::system_clock::now()}
 {
 	this->map = map;
 
@@ -211,6 +212,7 @@ void Car::makeTurn()
 	int col = this->x / ts, row = this->y / ts;
 	if( this->map->onCrossroads( this->x / ts, this->y / ts ) )
 	{
+		is_leaving = true;
 		switch( this->turnDir )
 		{
 			case TURN_RIGHT:
@@ -288,4 +290,17 @@ void Car::makeTurn()
 				break;
 		}
 	}
+}
+
+double Car::elpased_time()
+{
+	auto actual_time = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = actual_time-creation_time;
+	return elapsed_seconds.count();
+}
+
+bool Car::passedCrossroad()
+{
+	int ts = TileMap::TILE_SIZE;
+	return !this->map->onCrossroads( this->x / ts, this->y / ts ) && is_leaving;
 }

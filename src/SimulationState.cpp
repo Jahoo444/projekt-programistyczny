@@ -112,3 +112,52 @@ void SimulationState::render( Renderer *renderer )
 {
 	renderer->render( this );
 }
+
+traffic_state SimulationState::getTrafficState() {
+	double wait_time {0};
+	long unsigned int car_count {0};
+	intersection_node up {0,0,this->map->getColor(Light::DIRECTIONS::UP)};
+	intersection_node down {0,0,this->map->getColor(Light::DIRECTIONS::DOWN)};
+	intersection_node right {0,0,this->map->getColor(Light::DIRECTIONS::RIGHT)};
+	intersection_node left {0,0,this->map->getColor(Light::DIRECTIONS::LEFT)};
+	for(const auto& car:cars) {
+		if(!car->passedCrossroad()) {
+			wait_time += car->elpased_time();
+			car_count++;
+			switch( car->getDirection() )
+			{
+			case Car::DIRECTIONS::UP:
+					std::get<0>(up)++;
+					std::get<1>(up)+=car->elpased_time();
+					break;
+
+				case Car::DIRECTIONS::DOWN:
+					std::get<0>(down)++;
+					std::get<1>(down)+=car->elpased_time();
+					break;
+
+				case Car::DIRECTIONS::RIGHT:
+					std::get<0>(right)++;
+					std::get<1>(right)+=car->elpased_time();
+					break;
+
+				case Car::DIRECTIONS::LEFT:
+					std::get<0>(left)++;
+					std::get<1>(left)+=car->elpased_time();
+					break;
+
+				default:
+					break;
+			}
+		}
+	}
+
+	traffic_state t {
+		car_count,
+		wait_time,
+		{up, down, right, left}
+	};
+
+
+	return t;
+}

@@ -6,6 +6,7 @@
 #define _CAR_H_
 
 #include "TileMap.h"
+#include <chrono>
 
 class Car
 {
@@ -54,6 +55,10 @@ class Car
 
 		static const int width = 28, height /* length */ = 52;	// wymiary
 
+		double elpased_time();
+
+		bool passedCrossroad();
+
 	private:
 		TileMap *map;
 		float x, y;	// pozycja
@@ -65,6 +70,9 @@ class Car
 		int texture;
 
 		bool remove;	// czy usunac
+		bool is_leaving {false};
+
+		std::chrono::time_point<std::chrono::system_clock> creation_time;
 };
 
 #endif // _CAR_H_

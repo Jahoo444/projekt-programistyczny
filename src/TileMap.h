@@ -59,6 +59,7 @@ class TileMap
 
 		bool tileTaken( int col, int row ) { if( col >= 0 && col < this->width && row >= 0 && row < this->height ) return this->taken[ col ][ row ]; else return false; }	// czy plytka zajeta
 		Light::COLORS getColor( int col, int row );
+		Light::COLORS getColor( Light::DIRECTIONS dir );
 		Light::DIRECTIONS getLightDirection( int col, int row );
 		bool onCrossroads( int col, int row )
 		{

@@ -125,6 +125,15 @@ Light::COLORS TileMap::getColor( int col, int row )
 		return Light::COLORS::GREEN;
 }
 
+Light::COLORS TileMap::getColor( Light::DIRECTIONS dir )
+{
+	for(const auto& light:lights){
+		if(light.second->getDirection() == dir)
+			return light.second->getColor();
+	}
+	return Light::COLORS::NUM_COLORS;
+}
+
 Light::DIRECTIONS TileMap::getLightDirection( int col, int row )
 {
 	std::map< std::pair< int, int >, Light* >::iterator it = this->lights.find( std::make_pair( col, row ) );
