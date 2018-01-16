@@ -34,7 +34,7 @@ class Car
 
 		float SPEED = 1.5f;	// szybkosc
 
-		Car( TileMap *map, int row, int column );
+		Car( TileMap *map, int column, int row );
 
 		void update(const std::vector< Car* > cars);
 

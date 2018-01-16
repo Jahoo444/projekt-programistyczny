@@ -82,7 +82,7 @@ void TileMap::load( const char *path )
 	for( int i = 0; i < numlights; i++ )
 	{
 		int dir, row, column, color;
-		fscanf( file, "%d %d %d %d\n", &dir, &row, &column, &color );
+		fscanf( file, "%d %d %d %d\n", &dir, &column, &row, &color );
 		this->lights[ std::make_pair( column, row ) ] = new Light( ( enum Light::DIRECTIONS ) dir, ( enum Light::COLORS ) color, time );
 	}
 
@@ -92,7 +92,7 @@ void TileMap::load( const char *path )
 	for( int i = 0; i < numspawners; i++ )
 	{
 		int row, column;
-		fscanf( file, "%d %d\n", &row, &column );
+		fscanf( file, "%d %d\n", &column, &row );
 		this->spawners.push_back( std::make_pair( column, row ) );
 	}
 

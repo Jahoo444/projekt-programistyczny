@@ -6,7 +6,7 @@
 #include <iostream>
 #include <chrono>
 
-Car::Car( TileMap *map, int row, int column ) : creation_time{std::chrono::system_clock::now()}
+Car::Car( TileMap *map, int column, int row ) : creation_time{std::chrono::system_clock::now()}
 {
 	this->map = map;
 

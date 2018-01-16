@@ -120,15 +120,15 @@ void Renderer::render( SimulationState *state )
 	{
 		for( int column = 0; column < width; column++ )
 		{
-			int which = data[ row ][ column ];
+			int which = data[ column ][ row ];
 
 			if( which < 0 || which > TileMap::TILE_TYPES::CROSSROADS_LR )
 				which = 0;
 
 			SDL_Surface *surf = this->resources.textures[ which ];
 
-			SDL_Rect rect = {	( int ) ( scale * ( row * s - cx ) + this->width / 2 ),
-								( int ) ( scale * ( column * s - cy ) + this->height / 2 ),
+			SDL_Rect rect = {	( int ) ( scale * ( column * s - cx ) + this->width / 2 ),
+								( int ) ( scale * ( row * s - cy ) + this->height / 2 ),
 								( int ) ( scale * s ),
 								( int ) ( scale * s ) };
 
@@ -147,8 +147,8 @@ void Renderer::render( SimulationState *state )
 
 		int w = light->spriteWidth(), h = light->spriteHeight();
 
-		SDL_Rect rect = {	( int ) ( scale * ( row * s + s / 2 - w / 2 - cx ) + this->width / 2 ),
-							( int ) ( scale * ( column * s + s / 2 - h / 2 - cy ) + this-> height / 2 ),
+		SDL_Rect rect = {	( int ) ( scale * ( column * s + s / 2 - w / 2 - cx ) + this->width / 2 ),
+							( int ) ( scale * ( row * s + s / 2 - h / 2 - cy ) + this-> height / 2 ),
 							( int ) ( scale * w ),
 							( int ) ( scale * h ) };
 
