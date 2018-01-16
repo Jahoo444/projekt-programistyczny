@@ -11,10 +11,13 @@ include_directories(${SDL2_INCLUDE_DIRS})
 set(SOURCES
 	src/main.cpp
 	src/Car.cpp
+	src/Light.cpp
 	src/Renderer.cpp
 	src/Simulation.cpp
 	src/SimulationState.cpp
 	src/TileMap.cpp
+	src/traffic_state.cpp
+	src/command.cpp
 )
 
 set(HEADERS
@@ -26,6 +29,9 @@ set(HEADERS
 	src/SimulationState.h
 	src/State.h
 	src/TileMap.h
+	src/traffic_state.h
+	src/command.h
+	src/enum_map.h
 )
 
 

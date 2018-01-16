@@ -13,6 +13,7 @@
 #include "Car.h"
 #include "Camera.h"
 #include "traffic_state.h"
+#include "command.h"
 
 class Renderer;
 
@@ -36,6 +37,10 @@ class SimulationState : public State
 		Camera *getCamera() { return this->camera; }
 
 		traffic_state getTrafficState();
+
+		void addLightCommand(command& c);
+		void addLightCommand(std::vector<command> cmd_vec);
+		void clearLightCommands(Light::DIRECTIONS dir);
 
 	private:
 		TileMap *map = NULL;	// mapa ze skrzyzowaniami

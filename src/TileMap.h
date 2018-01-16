@@ -14,6 +14,7 @@
 #include <SDL.h>
 
 #include "Light.h"
+#include "command.h"
 
 class TileMap
 {
@@ -67,6 +68,9 @@ class TileMap
 				return false;
 			return this->data[ col ][ row ] >= CROSSROADS_UL && this->data[ col ][ row ] <= CROSSROADS_LR;
 		}
+
+		void addLightCommand(command& c);
+		void clearLightCommands(Light::DIRECTIONS dir);
 
 	private:
 		char **data = NULL;	// dane, tablica 2d, info o typie plytki

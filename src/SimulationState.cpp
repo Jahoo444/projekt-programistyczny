@@ -116,10 +116,10 @@ void SimulationState::render( Renderer *renderer )
 traffic_state SimulationState::getTrafficState() {
 	double wait_time {0};
 	long unsigned int car_count {0};
-	intersection_node up {0,0,this->map->getColor(Light::DIRECTIONS::UP)};
-	intersection_node down {0,0,this->map->getColor(Light::DIRECTIONS::DOWN)};
-	intersection_node right {0,0,this->map->getColor(Light::DIRECTIONS::RIGHT)};
-	intersection_node left {0,0,this->map->getColor(Light::DIRECTIONS::LEFT)};
+	intersection_node up    {Light::DIRECTIONS::UP,    0, 0, this->map->getColor(Light::DIRECTIONS::UP)};
+	intersection_node down  {Light::DIRECTIONS::DOWN,  0, 0, this->map->getColor(Light::DIRECTIONS::DOWN)};
+	intersection_node right {Light::DIRECTIONS::RIGHT, 0, 0, this->map->getColor(Light::DIRECTIONS::RIGHT)};
+	intersection_node left  {Light::DIRECTIONS::LEFT,  0, 0, this->map->getColor(Light::DIRECTIONS::LEFT)};
 	for(const auto& car:cars) {
 		if(!car->passedCrossroad()) {
 			wait_time += car->elpased_time();
@@ -127,23 +127,23 @@ traffic_state SimulationState::getTrafficState() {
 			switch( car->getDirection() )
 			{
 			case Car::DIRECTIONS::UP:
-					std::get<0>(up)++;
-					std::get<1>(up)+=car->elpased_time();
+					std::get<1>(up)++;
+					std::get<2>(up)+=car->elpased_time();
 					break;
 
 				case Car::DIRECTIONS::DOWN:
-					std::get<0>(down)++;
-					std::get<1>(down)+=car->elpased_time();
+					std::get<1>(down)++;
+					std::get<2>(down)+=car->elpased_time();
 					break;
 
 				case Car::DIRECTIONS::RIGHT:
-					std::get<0>(right)++;
-					std::get<1>(right)+=car->elpased_time();
+					std::get<1>(right)++;
+					std::get<2>(right)+=car->elpased_time();
 					break;
 
 				case Car::DIRECTIONS::LEFT:
-					std::get<0>(left)++;
-					std::get<1>(left)+=car->elpased_time();
+					std::get<1>(left)++;
+					std::get<2>(left)+=car->elpased_time();
 					break;
 
 				default:
@@ -160,4 +160,20 @@ traffic_state SimulationState::getTrafficState() {
 
 
 	return t;
+}
+
+void SimulationState::addLightCommand(std::vector<command> cmd_vec)
+{
+	for(auto& cmd : cmd_vec)
+	this->map->addLightCommand(cmd);
+}
+
+void SimulationState::addLightCommand(command& c)
+{
+	this->map->addLightCommand(c);
+}
+
+void SimulationState::clearLightCommands(Light::DIRECTIONS dir)
+{
+	this->map->clearLightCommands(dir);
 }

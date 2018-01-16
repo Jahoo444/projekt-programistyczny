@@ -105,10 +105,22 @@ void TileMap::update()
 	for( auto const & item : this->lights )
 	{
 		item.second->update();
-
-		if( time - item.second->getSwitchTime() >= SWITCH_TIME )
+		auto cmd = item.second->getCommand();
+		switch(cmd.getCommandType())
 		{
+		case command::CHANGE_LIGHT:
 			item.second->switchColor();
+			item.second->popFirstCommand();
+			break;
+		case command::WAIT:
+			if(time - item.second->getSwitchTime() >= cmd.getTime())
+			{
+				item.second->popFirstCommand();
+			}
+			break;
+		default :
+			printf("UNKNOWN COMMAND\n");
+			break;
 		}
 	}
 }
@@ -144,4 +156,21 @@ Light::DIRECTIONS TileMap::getLightDirection( int col, int row )
 	}
 	else
 		return Light::DIRECTIONS::NONE;
+}
+
+void TileMap::addLightCommand(command& c)
+{
+	auto dir = c.getLightDirection();
+	for(const auto& light:lights){
+		if(light.second->getDirection() == dir)
+			light.second->addCommand(c);
+	}
+}
+
+void TileMap::clearLightCommands(Light::DIRECTIONS dir)
+{
+	for(const auto& light:lights){
+		if(light.second->getDirection() == dir)
+			light.second->clearCommands();
+	}
 }
