@@ -18,6 +18,7 @@ set(SOURCES
 	src/TileMap.cpp
 	src/traffic_state.cpp
 	src/command.cpp
+	src/MenuState.cpp
 )
 
 set(HEADERS
@@ -32,6 +33,7 @@ set(HEADERS
 	src/traffic_state.h
 	src/command.h
 	src/enum_map.h
+	src/MenuState.h
 )
 
 
