@@ -115,14 +115,17 @@ void SimulationState::render( Renderer *renderer )
 
 traffic_state SimulationState::getTrafficState() {
 	double wait_time {0};
+	double max_wait_time {0};
 	long unsigned int car_count {0};
-	intersection_node up    {Light::DIRECTIONS::UP,    0, 0, this->map->getColor(Light::DIRECTIONS::UP)};
-	intersection_node down  {Light::DIRECTIONS::DOWN,  0, 0, this->map->getColor(Light::DIRECTIONS::DOWN)};
-	intersection_node right {Light::DIRECTIONS::RIGHT, 0, 0, this->map->getColor(Light::DIRECTIONS::RIGHT)};
-	intersection_node left  {Light::DIRECTIONS::LEFT,  0, 0, this->map->getColor(Light::DIRECTIONS::LEFT)};
+	intersection_node up    {Light::DIRECTIONS::UP,    0, 0, this->map->getColor(Light::DIRECTIONS::UP), this->map->getCommandsSize(Light::DIRECTIONS::UP)};
+	intersection_node down  {Light::DIRECTIONS::DOWN,  0, 0, this->map->getColor(Light::DIRECTIONS::DOWN), this->map->getCommandsSize(Light::DIRECTIONS::DOWN)};
+	intersection_node right {Light::DIRECTIONS::RIGHT, 0, 0, this->map->getColor(Light::DIRECTIONS::RIGHT), this->map->getCommandsSize(Light::DIRECTIONS::RIGHT)};
+	intersection_node left  {Light::DIRECTIONS::LEFT,  0, 0, this->map->getColor(Light::DIRECTIONS::LEFT), this->map->getCommandsSize(Light::DIRECTIONS::LEFT)};
 	for(const auto& car:cars) {
 		if(!car->passedCrossroad()) {
 			wait_time += car->elpased_time();
+			if(car->elpased_time() > max_wait_time)
+				max_wait_time = car->elpased_time();
 			car_count++;
 			switch( car->getDirection() )
 			{
@@ -155,6 +158,7 @@ traffic_state SimulationState::getTrafficState() {
 	traffic_state t {
 		car_count,
 		wait_time,
+		max_wait_time,
 		{up, down, right, left}
 	};
 

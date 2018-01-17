@@ -28,4 +28,5 @@ Symulator ruchu ulicznego
   * `make`
 ### Running program
 1. run
-  * `./simulation`
+  * `./simulation` with precognition
+  * `./simulation -nope` without precognition

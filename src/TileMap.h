@@ -71,6 +71,7 @@ class TileMap
 
 		void addLightCommand(command& c);
 		void clearLightCommands(Light::DIRECTIONS dir);
+		int getCommandsSize( Light::DIRECTIONS dir );
 
 	private:
 		char **data = NULL;	// dane, tablica 2d, info o typie plytki

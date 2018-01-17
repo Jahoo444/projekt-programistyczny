@@ -146,6 +146,15 @@ Light::COLORS TileMap::getColor( Light::DIRECTIONS dir )
 	return Light::COLORS::NUM_COLORS;
 }
 
+int TileMap::getCommandsSize( Light::DIRECTIONS dir )
+{
+	for(const auto& light:lights){
+		if(light.second->getDirection() == dir)
+			return light.second->getCommandSize();
+	}
+	return 0;
+}
+
 Light::DIRECTIONS TileMap::getLightDirection( int col, int row )
 {
 	std::map< std::pair< int, int >, Light* >::iterator it = this->lights.find( std::make_pair( col, row ) );

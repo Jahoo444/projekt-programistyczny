@@ -19,7 +19,7 @@ class Simulation
 
 		Simulation();
 
-		void init();
+		void init(bool use_precognition = true);
 		void run();
 
 	private:

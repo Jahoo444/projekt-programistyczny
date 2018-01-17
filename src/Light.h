@@ -88,6 +88,7 @@ class Light
 		static const int width = 26, height = 52;
 
 		void addCommand(command& c);
+		int getCommandSize();
 		void clearCommands();
 		void popFirstCommand();
 		command getCommand();

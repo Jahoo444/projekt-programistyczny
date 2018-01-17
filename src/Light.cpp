@@ -14,12 +14,17 @@ void Light::addCommand(command& c)
 	commands.push(c);
 }
 
+int Light::getCommandSize()
+{
+	return commands.size();
+}
+
 command Light::getCommand()
 {
 	if(commands.size() == 0)
 	{
-		commands.push(command::command_wait(this->dir, 8000));
-		commands.push(command::command_change_light(this->dir));
+		commands.push(command::command_wait(this->dir, 1000));
+		//commands.push(command::command_change_light(this->dir));
 	}
 
 	if(commands.size() > 0)
