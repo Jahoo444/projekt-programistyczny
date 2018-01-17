@@ -195,7 +195,7 @@ void Simulation::run()
 void Simulation::startSimulation( int crossroads, enum MenuState::TRAFFIC_DENSITIES density )
 {
 	SimulationState *state = new SimulationState();
-	state->init();
+	state->init( crossroads );
 	state->setDensity( density );
 	this->state = state;
 	

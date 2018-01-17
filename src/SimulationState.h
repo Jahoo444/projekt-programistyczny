@@ -26,7 +26,7 @@ class SimulationState : public State
 
 		SimulationState();
 
-		void init();
+		void init( int crossroads );
 		void update();
 		void render( Renderer *renderer );
 

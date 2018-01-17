@@ -7,10 +7,29 @@ SimulationState::SimulationState()
 {
 }
 
-void SimulationState::init()
+void SimulationState::init( int crossroads )
 {
 	this->map = new TileMap();
-	this->map->load( "config/map" );
+	
+	switch( crossroads )
+	{
+		case 0:
+			this->map->load( "config/map" );
+			break;
+		
+		case 1:
+			this->map->load( "config/map2" );
+			break;
+		
+		case 2:
+			this->map->load( "config/map3" );
+			break;
+		
+		default:
+			this->map->load( "config/map" );
+			break;
+	}
+	
 
 	std::vector< std::pair< int, int > > *spawners = this->map->getSpawners();
 
