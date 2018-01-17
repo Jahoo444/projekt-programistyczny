@@ -38,17 +38,17 @@ void SimulationState::setDensity( enum MenuState::TRAFFIC_DENSITIES density )
 			minRespawnTime = 3000;
 			maxRespawnTime = 7000;
 			break;
-		
+
 		case MenuState::TRAFFIC_DENSITIES::MEDIUM:
 			minRespawnTime = 2000;
 			maxRespawnTime = 5000;
 			break;
-		
+
 		case MenuState::TRAFFIC_DENSITIES::HIGH:
 			minRespawnTime = 1000;
 			maxRespawnTime = 3000;
 			break;
-		
+
 		default:
 			minRespawnTime = 1000;
 			maxRespawnTime = 3000;
@@ -127,8 +127,12 @@ void SimulationState::update()
 
 		auto pos = ( *spawners )[ roll ];
 		int col = std::get< 0 >( pos ), row = std::get< 1 >( pos );
-		Car *car = new Car( this->map, col, row );
-		this->cars.push_back( car );
+
+		if( !this->map->tileTaken( col, row ) )
+		{
+			Car *car = new Car( this->map, col, row );
+			this->cars.push_back( car );
+		}
 
 		this->nextRespawnTime = SDL_GetTicks() + rand() % ( this->maxRespawnTime - this->minRespawnTime ) + this->minRespawnTime;
 	}
