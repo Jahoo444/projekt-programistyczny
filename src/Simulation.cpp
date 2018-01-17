@@ -10,7 +10,6 @@ std::ofstream res_pre("results_with_precognition.txt", std::ios::binary);
 std::ofstream res("results.txt", std::ios::binary);
 auto start = std::chrono::system_clock::now();
 
-
 Uint32 info_callback_pre(Uint32 interval, void *param)
 {
 	auto state = static_cast<SimulationState*>(param);
@@ -154,14 +153,20 @@ Simulation::Simulation()
 
 void Simulation::init(bool use_precognition)
 {
+	this->use_precognition = use_precognition;
 	srand( 1 );
 	this->renderer.init();
+	
+	this->state = new MenuState( this );
+	this->state->init();
+	/*
 	this->state = new SimulationState();
 	this->state->init();
 	if(use_precognition)
 		timerID = SDL_AddTimer( 1000, info_callback_pre, this->state);
 	else
 		timerID = SDL_AddTimer( 1000, info_callback, this->state);
+	*/
 }
 
 void Simulation::run()
@@ -187,7 +192,18 @@ void Simulation::run()
 	}
 }
 
-
+void Simulation::startSimulation( int crossroads, enum MenuState::TRAFFIC_DENSITIES density )
+{
+	SimulationState *state = new SimulationState();
+	state->init();
+	state->setDensity( density );
+	this->state = state;
+	
+	if(use_precognition)
+		timerID = SDL_AddTimer( 1000, info_callback_pre, this->state);
+	else
+		timerID = SDL_AddTimer( 1000, info_callback, this->state);
+}
 
 bool Simulation::handleEvents()
 {

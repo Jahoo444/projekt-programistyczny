@@ -10,6 +10,7 @@
 
 #include "Renderer.h"
 #include "SimulationState.h"
+#include "MenuState.h"
 
 class Simulation
 {
@@ -21,6 +22,8 @@ class Simulation
 
 		void init(bool use_precognition = true);
 		void run();
+		
+		void startSimulation( int crossroads, enum MenuState::TRAFFIC_DENSITIES density );
 
 	private:
 		void update();
@@ -32,6 +35,8 @@ class Simulation
 		State *state = NULL;
 
 		SDL_TimerID timerID;
+		
+		bool use_precognition;
 };
 
 #endif // _SIMULATION_H_

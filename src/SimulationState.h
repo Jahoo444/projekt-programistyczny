@@ -14,14 +14,15 @@
 #include "Camera.h"
 #include "traffic_state.h"
 #include "command.h"
+#include "MenuState.h"
 
 class Renderer;
 
 class SimulationState : public State
 {
 	public:
-		static const int MIN_RESPAWN_TIME = 1000;
-		static const int MAX_RESPAWN_TIME = 3000;
+		//static const int MIN_RESPAWN_TIME = 1000;
+		//static const int MAX_RESPAWN_TIME = 3000;
 
 		SimulationState();
 
@@ -35,6 +36,8 @@ class SimulationState : public State
 		std::vector< Car* > *getCars() { return &( this->cars ); }
 
 		Camera *getCamera() { return this->camera; }
+		
+		void setDensity( enum MenuState::TRAFFIC_DENSITIES density );
 
 		traffic_state getTrafficState();
 
@@ -49,6 +52,9 @@ class SimulationState : public State
 		Camera *camera;
 
 		Uint32 nextRespawnTime;
+		
+		int minRespawnTime = 1000;
+		int maxRespawnTime = 3000;
 };
 
 #endif // _SIMULATIONS_STATE_H_

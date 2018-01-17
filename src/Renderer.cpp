@@ -98,6 +98,85 @@ void Renderer::loadResources()
 			this->resources.lightTextures[ i ][ j ] = SDL_LoadBMP( path );
 		}
 	}
+	
+	this->resources.options[ 0 ][ 0 ] = SDL_LoadBMP( "res/menu/opt0.bmp" );
+	this->resources.options[ 1 ][ 0 ] = SDL_LoadBMP( "res/menu/opt1.bmp" );
+	this->resources.options[ 2 ][ 0 ] = SDL_LoadBMP( "res/menu/opt2.bmp" );
+	this->resources.options[ 3 ][ 0 ] = SDL_LoadBMP( "res/menu/opt3.bmp" );
+	this->resources.options[ 0 ][ 1 ] = SDL_LoadBMP( "res/menu/opt0s.bmp" );
+	this->resources.options[ 1 ][ 1 ] = SDL_LoadBMP( "res/menu/opt1s.bmp" );
+	this->resources.options[ 2 ][ 1 ] = SDL_LoadBMP( "res/menu/opt2s.bmp" );
+	this->resources.options[ 3 ][ 1 ] = SDL_LoadBMP( "res/menu/opt3s.bmp" );
+	
+	this->resources.densities[ 0 ][ 0 ] = SDL_LoadBMP( "res/menu/den0.bmp" );
+	this->resources.densities[ 1 ][ 0 ] = SDL_LoadBMP( "res/menu/den1.bmp" );
+	this->resources.densities[ 2 ][ 0 ] = SDL_LoadBMP( "res/menu/den2.bmp" );
+	this->resources.densities[ 0 ][ 1 ] = SDL_LoadBMP( "res/menu/den0s.bmp" );
+	this->resources.densities[ 1 ][ 1 ] = SDL_LoadBMP( "res/menu/den1s.bmp" );
+	this->resources.densities[ 2 ][ 1 ] = SDL_LoadBMP( "res/menu/den2s.bmp" );
+	
+	this->resources.crossroads[ 0 ][ 0 ] = SDL_LoadBMP( "res/menu/cs1.bmp" );
+	this->resources.crossroads[ 1 ][ 0 ] = SDL_LoadBMP( "res/menu/cs2.bmp" );
+	this->resources.crossroads[ 2 ][ 0 ] = SDL_LoadBMP( "res/menu/cs3.bmp" );
+	this->resources.crossroads[ 0 ][ 1 ] = SDL_LoadBMP( "res/menu/cs1s.bmp" );
+	this->resources.crossroads[ 1 ][ 1 ] = SDL_LoadBMP( "res/menu/cs2s.bmp" );
+	this->resources.crossroads[ 2 ][ 1 ] = SDL_LoadBMP( "res/menu/cs3s.bmp" );
+}
+
+void Renderer::render( MenuState *state )
+{
+	enum MenuState::OPTIONS option = state->getCurrentOption();
+	enum MenuState::TRAFFIC_DENSITIES density = state->getTrafficDensity();
+	int cs = state->getCrossroads();
+	
+	SDL_Rect rect = { 0, 0, this->width, this->height };
+	
+	SDL_FillRect( this->screen, &rect, 0 );
+	
+	int y = 0;
+	
+	for( int i = 0; i < MenuState::NUM_OPTIONS; i++ )
+	{
+		SDL_Surface *surf;
+		
+		if( i == ( int ) MenuState::OPTIONS::CHOOSE_CROSSROADS )
+		{
+			if( i == option )
+				surf = this->resources.crossroads[ cs ][ 1 ];
+			else
+				surf = this->resources.crossroads[ cs ][ 0 ];
+		}
+		else
+		{
+			if( i == option )
+				surf = this->resources.options[ i ][ 1 ];
+			else
+				surf = this->resources.options[ i ][ 0 ];
+		}
+		
+		SDL_Rect rect = {	this->width / 2 - surf->w / 2,
+							100 + 100 * i,
+							surf->w,
+							surf->h };
+		
+		SDL_BlitSurface( surf, NULL, this->screen, &rect );
+		
+		if( i == ( int ) MenuState::OPTIONS::CHOOSE_DENSITY )
+		{
+			SDL_Surface *surf2;
+			
+			surf2 = this->resources.densities[ density ][ 0 ];
+			
+			SDL_Rect rect = {	this->width / 2 + surf->w / 2 + 50,
+								100 + 100 * i,
+								surf2->w,
+								surf2->h };
+		
+			SDL_BlitSurface( surf2, NULL, this->screen, &rect );
+		}
+	}
+	
+	SDL_UpdateWindowSurface( this->window );
 }
 
 void Renderer::render( SimulationState *state )

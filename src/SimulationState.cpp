@@ -22,12 +22,38 @@ void SimulationState::init()
 		this->cars.push_back( car );
 	}
 
-	this->nextRespawnTime = SDL_GetTicks() + rand() % ( MAX_RESPAWN_TIME - MIN_RESPAWN_TIME ) + MIN_RESPAWN_TIME;
+	this->nextRespawnTime = SDL_GetTicks() + rand() % ( this->maxRespawnTime - this->minRespawnTime ) + this->minRespawnTime;
 
 	int w = map->getWidth(), h = map->getHeight();
 	int s = TileMap::TILE_SIZE;
 
 	this->camera = new Camera( w / 2 * s, h / 2 * s, 1.0f, w * s, h * s);
+}
+
+void SimulationState::setDensity( enum MenuState::TRAFFIC_DENSITIES density )
+{
+	switch( density )
+	{
+		case MenuState::TRAFFIC_DENSITIES::LOW:
+			minRespawnTime = 3000;
+			maxRespawnTime = 7000;
+			break;
+		
+		case MenuState::TRAFFIC_DENSITIES::MEDIUM:
+			minRespawnTime = 2000;
+			maxRespawnTime = 5000;
+			break;
+		
+		case MenuState::TRAFFIC_DENSITIES::HIGH:
+			minRespawnTime = 1000;
+			maxRespawnTime = 3000;
+			break;
+		
+		default:
+			minRespawnTime = 1000;
+			maxRespawnTime = 3000;
+			break;
+	}
 }
 
 bool SimulationState::handleEvent( SDL_Event *event )
@@ -104,7 +130,7 @@ void SimulationState::update()
 		Car *car = new Car( this->map, col, row );
 		this->cars.push_back( car );
 
-		this->nextRespawnTime = SDL_GetTicks() + rand() % ( MAX_RESPAWN_TIME - MIN_RESPAWN_TIME ) + MIN_RESPAWN_TIME;
+		this->nextRespawnTime = SDL_GetTicks() + rand() % ( this->maxRespawnTime - this->minRespawnTime ) + this->minRespawnTime;
 	}
 }
 

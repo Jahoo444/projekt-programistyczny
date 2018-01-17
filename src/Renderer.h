@@ -10,6 +10,7 @@
 #include <SDL.h>
 
 #include "SimulationState.h"
+#include "MenuState.h"
 #include "TileMap.h"
 
 #define DEFAULT_WIDTH 800
@@ -24,6 +25,7 @@ class Renderer
 		
 		void init();
 		void render( SimulationState *state );
+		void render( MenuState *state );
 		
 		int getWidth() { return this->width; }
 		int getHeight() { return this->height; }
@@ -47,6 +49,10 @@ class Renderer
 			SDL_Surface *textures[ TileMap::TILE_TYPES::NUM_TILE_TYPES ];
 			SDL_Surface *carTextures[ NUM_CARS ][ NUM_DIRECTIONS ];
 			SDL_Surface *lightTextures[ NUM_COLORS ][ NUM_DIRECTIONS ];
+			
+			SDL_Surface *options[ MenuState::NUM_OPTIONS ][ 2 ];
+			SDL_Surface *densities[ MenuState::NUM_TRAFFIC_DENSITIES ][ 2 ];
+			SDL_Surface *crossroads[ MenuState::NUM_CROSSROADS ][ 2 ];
 		} resources;
 };
 
