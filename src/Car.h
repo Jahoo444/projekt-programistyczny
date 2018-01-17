@@ -38,7 +38,7 @@ class Car
 
 		void update(const std::vector< Car* > cars);
 
-		void makeTurn();	// skrecanie auta (o ile ma taki zamiar i moze wykonac manewr)
+		void makeTurn(const std::vector< Car* > cars);	// skrecanie auta (o ile ma taki zamiar i moze wykonac manewr)
 
 		std::pair< float, float > getPosition() { return std::make_pair( this->x, this-> y ); }
 

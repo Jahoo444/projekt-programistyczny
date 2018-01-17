@@ -136,7 +136,7 @@ void Car::update(const std::vector< Car* > cars)
 		dx = dy = 0.0f;*/
 
 	for(const auto& c: cars) {
-		if(this != c && isFrontCollision(c, 30.0)) {
+		if(this != c && isFrontCollision(c, 25.0)) {
 			dx = dy = 0.0f;
 		}
 	}
@@ -148,7 +148,7 @@ void Car::update(const std::vector< Car* > cars)
 	col = this->x / ts, row = this->y / ts;
 	this->map->takeTile( col, row );
 
-	makeTurn();
+	makeTurn(cars);
 }
 
 bool Car::isFrontCollision(Car *c, float distance) {
@@ -203,15 +203,22 @@ bool Car::isFrontCollision(Car *c, float distance) {
 	return collision;
 }
 
-void Car::makeTurn()
+void Car::makeTurn(const std::vector< Car* > cars)
 {
 	if( this->turnDir == NO_TURN )
 		return;
 
 	int ts = TileMap::TILE_SIZE;
 	int col = this->x / ts, row = this->y / ts;
+
 	if( this->map->onCrossroads( this->x / ts, this->y / ts ) )
 	{
+		for(const auto& c: cars) {
+			if(this != c && c->map->onCrossroads( c->x / ts, c->y / ts ) && c->turnDir == TURN_LEFT) {
+				c->turnDir = NO_TURN;
+			}
+		}
+
 		is_leaving = true;
 		switch( this->turnDir )
 		{
