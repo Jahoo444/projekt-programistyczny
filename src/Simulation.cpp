@@ -2,8 +2,11 @@
 
 #include "Light.h"
 #include "traffic_state.h"
+#include "tensorflow/core/public/session.h"
+#include "tensorflow/core/platform/env.h"
 #include <fstream>
 #include <chrono>
+#include <limits>
 #include <time.h>
 
 std::ofstream res_pre("results_with_precognition.txt", std::ios::binary);
@@ -14,81 +17,26 @@ Uint32 info_callback_pre(Uint32 interval, void *param)
 {
 	auto state = static_cast<SimulationState*>(param);
 	auto ts = state->getTrafficState();
-	std::cout<<ts<<std::endl;
+	//std::cout<<ts<<std::endl;
 
-	float time_up_down = 0;
-	float time_right_left = 0;
+	intflow::Session<int,int,double,int,int> session;
+	intflow::NewSession(0, &session);
 
-	int cars_up_down = 0;
-	int cars_right_left = 0;
-
-	Light::COLORS color_up_down;
-	Light::COLORS color_right_left;
+	session.ConstraintsMin(std::make_tuple(Light::DIRECTIONS::UP,0,0.0,0,0));
+	session.ConstraintsMax(std::make_tuple(Light::DIRECTIONS::RIGHT,
+	                        std::numeric_limits<int>::max(),
+	                        std::numeric_limits<double>::max(),
+	                        Light::COLORS::RED,
+	                        std::numeric_limits<int>::max()));
 
 	for(auto& it : ts.intensity )
 	{
-		if(std::get<0>(it) == Light::DIRECTIONS::UP || std::get<0>(it) == Light::DIRECTIONS::DOWN)
-		{
-			cars_up_down += std::get<1>(it);
-			time_up_down += std::get<2>(it);
-			color_up_down = std::get<3>(it);
-		}
-		else if(std::get<0>(it) == Light::DIRECTIONS::LEFT || std::get<0>(it) == Light::DIRECTIONS::RIGHT)
-		{
-			cars_right_left += std::get<1>(it);
-			time_right_left += std::get<2>(it);
-			color_right_left = std::get<3>(it);
-		}
+		session.Extend(it);
 	}
 
-	if((time_up_down >= time_right_left * 2) && color_up_down == Light::COLORS::RED)
-	{
-		std::vector<command> cmd {command::command_change_light(Light::DIRECTIONS::UP),
-	                              command::command_change_light(Light::DIRECTIONS::DOWN),
-	                              command::command_change_light(Light::DIRECTIONS::LEFT),
-	                              command::command_change_light(Light::DIRECTIONS::RIGHT),
-	                              command::command_wait(Light::DIRECTIONS::UP, 2000),
-	                              command::command_wait(Light::DIRECTIONS::DOWN, 2000),
-	                              command::command_wait(Light::DIRECTIONS::LEFT, 2000),
-	                              command::command_wait(Light::DIRECTIONS::RIGHT, 2000)};
-		state->addLightCommand(cmd);
-	}
-	else if((time_right_left >= time_up_down * 2) && color_right_left == Light::COLORS::RED)
-	{
-		std::vector<command> cmd {command::command_change_light(Light::DIRECTIONS::UP),
-	                              command::command_change_light(Light::DIRECTIONS::DOWN),
-	                              command::command_change_light(Light::DIRECTIONS::LEFT),
-	                              command::command_change_light(Light::DIRECTIONS::RIGHT),
-	                              command::command_wait(Light::DIRECTIONS::UP, 2000),
-	                              command::command_wait(Light::DIRECTIONS::DOWN, 2000),
-	                              command::command_wait(Light::DIRECTIONS::LEFT, 2000),
-	                              command::command_wait(Light::DIRECTIONS::RIGHT, 2000)};
-		state->addLightCommand(cmd);
-	}
-	else if((cars_right_left >= cars_up_down * 1.5) && color_right_left == Light::COLORS::RED)
-	{
-		std::vector<command> cmd {command::command_change_light(Light::DIRECTIONS::UP),
-	                              command::command_change_light(Light::DIRECTIONS::DOWN),
-	                              command::command_change_light(Light::DIRECTIONS::LEFT),
-	                              command::command_change_light(Light::DIRECTIONS::RIGHT),
-	                              command::command_wait(Light::DIRECTIONS::UP, 2000),
-	                              command::command_wait(Light::DIRECTIONS::DOWN, 2000),
-	                              command::command_wait(Light::DIRECTIONS::LEFT, 2000),
-	                              command::command_wait(Light::DIRECTIONS::RIGHT, 2000)};
-		state->addLightCommand(cmd);
-	}
-	else if((cars_up_down >= cars_right_left * 1.5) && color_up_down == Light::COLORS::RED)
-	{
-		std::vector<command> cmd {command::command_change_light(Light::DIRECTIONS::UP),
-	                              command::command_change_light(Light::DIRECTIONS::DOWN),
-	                              command::command_change_light(Light::DIRECTIONS::LEFT),
-	                              command::command_change_light(Light::DIRECTIONS::RIGHT),
-	                              command::command_wait(Light::DIRECTIONS::UP, 2000),
-	                              command::command_wait(Light::DIRECTIONS::DOWN, 2000),
-	                              command::command_wait(Light::DIRECTIONS::LEFT, 2000),
-	                              command::command_wait(Light::DIRECTIONS::RIGHT, 2000)};
-		state->addLightCommand(cmd);
-	}
+	auto results = session.Run();
+
+	state->addLightCommand(results);
 
 
 	auto end = std::chrono::system_clock::now();
@@ -156,7 +104,7 @@ void Simulation::init(bool use_precognition)
 	this->use_precognition = use_precognition;
 	srand( 1 );
 	this->renderer.init();
-	
+
 	this->state = new MenuState( this );
 	this->state->init();
 	/*
@@ -198,7 +146,7 @@ void Simulation::startSimulation( int crossroads, enum MenuState::TRAFFIC_DENSIT
 	state->init( crossroads );
 	state->setDensity( density );
 	this->state = state;
-	
+
 	if(use_precognition)
 		timerID = SDL_AddTimer( 1000, info_callback_pre, this->state);
 	else
